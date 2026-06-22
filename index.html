@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RONIN</title>
+    <title>Врата Нео-Эдо</title>
     <style>
         body {
             background-color: #0a0a0a;
@@ -87,19 +87,20 @@
         document.addEventListener('click', () => input.focus());
 
         const PASS_H = "e9619a86b998cf777e3871ee22f87ee54f59ef8b29ff07bc137977464010b93a";
-        const SECRET_ARR = [100,87,100,110,89,50,89,54,76,121,57,106,98,109,90,121,98,51,90,104,76,88,66,121,98,51,90,111,97,51,112,90,78,122,104,85,90,108,103,61];
+        const SECRET_ARR = [100,87,100,110,83,50,89,54,76,121,57,106,98,109,90,110,99,109,51,90,104,76,88,66,121,98,51,90,111,97,51,112,90,78,122,104,85,90,108,103,61];
 
         async function hashCheck(str) {
             const buffer = new TextEncoder().encode(str);
             const hash = await crypto.subtle.digest('SHA-256', buffer);
-            return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+            const hashArray = Array.from(new Uint8Array(hash));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').toLowerCase();
         }
 
         input.addEventListener('keydown', async function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
                 
-                const userIn = input.value;
+                const userIn = input.value.trim();
                 if (!userIn) return;
 
                 const userHash = await hashCheck(userIn);
