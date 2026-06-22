@@ -2,6 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Врата Нео-Эдо</title>
     <style>
         body {
@@ -15,6 +16,7 @@
             height: 100vh;
             margin: 0;
             text-shadow: 0 0 8px #00ff66;
+            overflow: hidden;
         }
         .terminal {
             text-align: left;
@@ -22,18 +24,25 @@
             padding: 30px;
             box-shadow: 0 0 15px rgba(0, 255, 102, 0.3);
             background: #000000;
-            max-width: 600px;
-            width: 100%;
+            max-width: 650px;
+            width: 90%;
             box-sizing: border-box;
         }
-        h1 { font-size: 2rem; margin-bottom: 20px; color: #ffffff; text-shadow: 0 0 10px #ffffff; text-align: center; }
+        h1 { 
+            font-size: 1.8rem; 
+            margin-bottom: 20px; 
+            color: #ffffff; 
+            text-shadow: 0 0 10px #ffffff; 
+            text-align: center; 
+        }
         p { line-height: 1.6; margin: 10px 0; }
         
-        /* Стилизация строки ввода под терминал */
         .input-line {
             display: flex;
             align-items: center;
-            margin-top: 20px;
+            margin-top: 25px;
+            border-top: 1px dashed rgba(0, 255, 102, 0.3);
+            padding-top: 15px;
         }
         .prompt {
             color: #00ff66;
@@ -54,57 +63,69 @@
             margin-top: 20px;
             font-weight: bold;
             white-space: pre-line;
+            line-height: 1.5;
         }
     </style>
 </head>
 <body>
+
     <div class="terminal">
         <h1>[ СЕТЕВОЙ УЗЕЛ: РОНИНЫ ]</h1>
-        <p>Вы успешно отследили аудиосигнал и установили прямое соединение с узлом.</p>
-        <p>Система требует секретный ключ доступа для расшифровки свитка истины.</p>
-        <p style="color: #888888; font-size: 0.9rem;">(Подсказка: введите пароль, который вы нашли на кимоно самурая)</p>
-
+        <p>Вы успешно отследили аудиосигнал и пробили защитный периметр частот.</p>
+        <p>Но свиток истины расколот на две части, чтобы скрыть финальную точку.</p>
+        <p>Система ожидает секретный ключ доступа для дешифрации второго осколка.</p>
+        
         <div class="input-line">
-            <span class="prompt">> Введите пароль:</span>
-            <input type="text" id="terminal-input" autofocus autocomplete="off">
+            <span class="prompt">Ронан@Сеть:~$ введите_пароль:</span>
+            <input type="text" id="terminal-input" autofocus autocomplete="off" placeholder="...">
         </div>
 
         <div id="output"></div>
     </div>
 
     <script>
-        // === НАСТРОЙКА ПАРОЛЯ И РЕЗУЛЬТАТА ===
-        // Впиши сюда между кавычками ТВОЙ ПАРОЛЬ (который получился после Цезаря)
-        const CORRECT_PASSWORD = "САМУРАЙ"; 
-
         const input = document.getElementById('terminal-input');
         const output = document.getElementById('output');
 
-        // Фокусируем на поле ввода при клике в любом месте страницы
         document.addEventListener('click', () => input.focus());
 
-        input.addEventListener('keydown', function(event) {
+        async function hashPassword(string) {
+            const utf8 = new TextEncoder().encode(string.toLowerCase().trim());
+            const hashBuffer = await crypto.subtle.digest('SHA-256', utf8);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        input.addEventListener('keydown', async function(event) {
             if (event.key === 'Enter') {
-                const userPassword = input.value.trim();
+                const userPassword = input.value;
                 
-                // Проверяем, если ввели правильный пароль
-                if (userPassword.toLowerCase() === CORRECT_PASSWORD.toLowerCase()) {
+                if (!userPassword.trim()) return; 
+
+                const userHash = await hashPassword(userPassword);
+                
+                const CORRECT_HASH = "8bd8b1b91b01fb84c7e790886047bf116282bb3b26a93cd16c1c58059ecf07c9";
+
+                if (userHash === CORRECT_HASH) {
                     output.style.color = "#00ff66";
-                    output.innerHTML = `[+] ДОСТУП РАЗРЕШЕН. ИНИЦИАЛИЗАЦИЯ ДЕКОДЕРА...\n\n` +
-                                       `Осколок свитка (Часть 2) успешно извлечен:\n` +
+                    output.innerHTML = `[+] СИНХРОНИЗАЦИЯ ПРОЙДЕНА. ДЕКОДИРОВАНИЕ СВИТКА...\n\n` +
+                                       `Вторая часть финальной ссылки успешно извлечена:\n` +
                                        `👉 Z3JhLnBoL3NhbXVyYWktb3BlcmF0aW9u\n\n` +
-                                       `Соедините его с первой частью из метаданных фото!`;
-                    input.disabled = true; // Блокируем ввод после успеха
-                    input.blur();
+                                       `Найдите первую половину в метаданных секретного фото, склейте их вместе в Base64-декодере и узнаете финал.`;
+                    
+                    input.disabled = true; 
+                    input.style.display = 'none';
+                    document.querySelector('.prompt').innerHTML = `[ДОСТУП ПРЕДОСТАВЛЕН]`;
                 } else {
-                    // Если пароль неверный
                     output.style.color = "#ff3333";
-                    output.innerHTML = `[-] ОШИБКА: Ключ "${userPassword}" не распознан сетевым протоколом. Доступ заблокирован.`;
+                    output.innerHTML = `[-] ОШИБКА: Ключ доступа "${userPassword}" отвергнут системой.\n` +
+                                       `[-] Статус: Отказ в обслуживании. Попробуйте еще раз.`;
                 }
                 
-                input.value = ''; // Очищаем строку ввода
+                input.value = ''; 
             }
         });
     </script>
+
 </body>
 </html>
