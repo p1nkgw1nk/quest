@@ -17,27 +17,94 @@
             text-shadow: 0 0 8px #00ff66;
         }
         .terminal {
-            text-align: center;
+            text-align: left;
             border: 1px solid #00ff66;
             padding: 30px;
             box-shadow: 0 0 15px rgba(0, 255, 102, 0.3);
             background: #000000;
             max-width: 600px;
+            width: 100%;
+            box-sizing: border-box;
         }
-        h1 { font-size: 2.5rem; margin-bottom: 20px; color: #ffffff; text-shadow: 0 0 10px #ffffff; }
-        p { line-height: 1.6; }
-        .blink { animation: blinker 1s linear infinite; }
-        @keyframes blinker { 50% { opacity: 0; } }
+        h1 { font-size: 2rem; margin-bottom: 20px; color: #ffffff; text-shadow: 0 0 10px #ffffff; text-align: center; }
+        p { line-height: 1.6; margin: 10px 0; }
+        
+        /* Стилизация строки ввода под терминал */
+        .input-line {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .prompt {
+            color: #00ff66;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        #terminal-input {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            outline: none;
+            flex-grow: 1;
+            text-shadow: 0 0 5px #ffffff;
+        }
+        #output {
+            margin-top: 20px;
+            font-weight: bold;
+            white-space: pre-line;
+        }
     </style>
 </head>
 <body>
     <div class="terminal">
         <h1>[ СЕТЕВОЙ УЗЕЛ: РОНИНЫ ]</h1>
-        <p>Вы успешно отследили аудиосигнал и пробили защитный периметр частот.</p>
-        <p>Но свиток истины расколот на две части, чтобы скрыть финальную точку.</p>
-        <p>Соедините этот осколок с тем, что хранит маска Мэнпо на первой картинке, и вы увидите скрытую тропу.</p>
-        <p class="blink">> Ожидание ввода...</p>
+        <p>Вы успешно отследили аудиосигнал и установили прямое соединение с узлом.</p>
+        <p>Система требует секретный ключ доступа для расшифровки свитка истины.</p>
+        <p style="color: #888888; font-size: 0.9rem;">(Подсказка: введите пароль, который вы нашли на кимоно самурая)</p>
+
+        <div class="input-line">
+            <span class="prompt">> Введите пароль:</span>
+            <input type="text" id="terminal-input" autofocus autocomplete="off">
+        </div>
+
+        <div id="output"></div>
     </div>
 
-    </body>
+    <script>
+        // === НАСТРОЙКА ПАРОЛЯ И РЕЗУЛЬТАТА ===
+        // Впиши сюда между кавычками ТВОЙ ПАРОЛЬ (который получился после Цезаря)
+        const CORRECT_PASSWORD = "САМУРАЙ"; 
+
+        const input = document.getElementById('terminal-input');
+        const output = document.getElementById('output');
+
+        // Фокусируем на поле ввода при клике в любом месте страницы
+        document.addEventListener('click', () => input.focus());
+
+        input.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                const userPassword = input.value.trim();
+                
+                // Проверяем, если ввели правильный пароль
+                if (userPassword.toLowerCase() === CORRECT_PASSWORD.toLowerCase()) {
+                    output.style.color = "#00ff66";
+                    output.innerHTML = `[+] ДОСТУП РАЗРЕШЕН. ИНИЦИАЛИЗАЦИЯ ДЕКОДЕРА...\n\n` +
+                                       `Осколок свитка (Часть 2) успешно извлечен:\n` +
+                                       `👉 Z3JhLnBoL3NhbXVyYWktb3BlcmF0aW9u\n\n` +
+                                       `Соедините его с первой частью из метаданных фото!`;
+                    input.disabled = true; // Блокируем ввод после успеха
+                    input.blur();
+                } else {
+                    // Если пароль неверный
+                    output.style.color = "#ff3333";
+                    output.innerHTML = `[-] ОШИБКА: Ключ "${userPassword}" не распознан сетевым протоколом. Доступ заблокирован.`;
+                }
+                
+                input.value = ''; // Очищаем строку ввода
+            }
+        });
+    </script>
+</body>
 </html>
