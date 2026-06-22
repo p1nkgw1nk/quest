@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Врата Нео-Эдо</title>
+    <title>RONIN</title>
     <style>
         body {
             background-color: #0a0a0a;
@@ -87,22 +87,12 @@
         document.addEventListener('click', () => input.focus());
 
         const PASS_H = "e9619a86b998cf777e3871ee22f87ee54f59ef8b29ff07bc137977464010b93a";
-        const ENCRYPTED_ANSWER = "FhYFFg8bFwEUExYVExYEFwYVGBYREBYXFhYdHhYfFwYfHgUdBhY=";
+        const SECRET_ARR = [100,87,100,110,89,50,89,54,76,121,57,106,98,109,90,121,98,51,90,104,76,88,66,121,98,51,90,111,97,51,112,90,78,122,104,85,90,108,103,61];
 
         async function hashCheck(str) {
             const buffer = new TextEncoder().encode(str);
             const hash = await crypto.subtle.digest('SHA-256', buffer);
             return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
-        function xorDecrypt(base64Str, key) {
-            const binaryStr = atob(base64Str);
-            let result = '';
-            for (let i = 0; i < binaryStr.length; i++) {
-                const charCode = binaryStr.charCodeAt(i) ^ key.charCodeAt(i % key.length);
-                result += String.fromCharCode(charCode);
-            }
-            return result;
         }
 
         input.addEventListener('keydown', async function(e) {
@@ -115,7 +105,7 @@
                 const userHash = await hashCheck(userIn);
 
                 if (userHash === PASS_H) {
-                    const decryptedText = xorDecrypt(ENCRYPTED_ANSWER, userIn); 
+                    const decryptedText = atob(String.fromCharCode(...SECRET_ARR)); 
 
                     output.style.color = "#00ff66";
                     output.innerHTML = `[+] SYNCHRONIZATION COMPLETE. DECRYPTING SCROLL...\n\n` +
