@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Врата Нео-Эдо</title>
+    <title>RONIN</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cryptojs/4.1.1/crypto-js.min.js"></script>
     <style>
         body {
             background-color: #0a0a0a;
@@ -68,12 +69,12 @@
 <body>
 
     <div class="terminal">
-        <h1>[ СЕТЕВОЙ УЗЕЛ: РОНИНЫ ]</h1>
-        <p>Вы успешно отследили аудиосигнал и установили прямое соединение.</p>
-        <p>Система ожидает секретный ключ доступа для дешифрации второго осколка свитка.</p>
+        <h1>[ NETWORK NODE: RONIN ]</h1>        
+        <p>You have successfully tracked the audio signal and established a direct connection.</p>        
+        <p>The system is awaiting the secret access key to decrypt the second scroll fragment.</p>
         
         <div class="input-line">
-            <span class="prompt">Ронан@Сеть:~$ введите_пароль:</span>
+      <span class="prompt">Ronin@Net:~$ enter_password:</span>
             <input type="text" id="terminal-input" autofocus autocomplete="off">
         </div>
 
@@ -86,30 +87,25 @@
 
         document.addEventListener('click', () => input.focus());
 
-        async function getHash(text) {
-            const msgBuffer = new TextEncoder().encode(text.toLowerCase().trim());
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        }
+        const ENCRYPTED_DATA = "U2FsdGVkX1+vGvEBlE/U0eT88uYAnI6rX2v3Y9rXhH9z9tQjS1M6Vp8qA2Fmsl7R0Q==";
 
-        input.addEventListener('keydown', async function(e) {
+        input.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
                 
-                const passwordValue = input.value;
-                if (!passwordValue.trim()) return;
+                const passwordValue = input.value.trim();
+                if (!passwordValue) return;
 
                 try {
-                    const userHash = await getHash(passwordValue);
-                    const CORRECT_HASH = "8bd8b1b91b01fb84c7e790886047bf116282bb3b26a93cd16c1c58059ecf07c9";
+                    let bytes = CryptoJS.AES.decrypt(ENCRYPTED_DATA, passwordValue);
+                    let decryptedText = bytes.toString(CryptoJS.enc.Utf8);
 
-                    if (userHash === CORRECT_HASH) {
+                    if (decryptedText.startsWith("uggcf://")) {
                         output.style.color = "#00ff66";
-                        output.innerHTML = `[+] СИНХРОНИЗАЦИЯ ПРОЙДЕНА. ДЕКОДИРОВАНИЕ СВИТКА...\n\n` +
-                                           `Вторая часть финальной ссылки успешно извлечена:\n` +
-                                           `👉 Z3JhLnBoL3NhbXVyYWktb3BlcmF0aW9u\n\n` +
-                                           `Найдите первую половину в метаданных секретного фото, склейте их вместе в Base64-декодере и узнаете финал квеста!`;
+                        output.innerHTML = `[+] SYNCHRONIZATION COMPLETE. DECRYPTING SCROLL...\n\n` +
+                                           `The second part of the final link has been successfully extracted:\n` +
+                                           `👉 ${decryptedText}\n\n` +
+                                           `You are very close.`;
                         
                         input.disabled = true;
                         input.style.display = 'none';
@@ -119,14 +115,13 @@
                         output.innerHTML = `[-] ОШИБКА: Ключ доступа "${passwordValue}" отвергнут.\n[-] Статус: Отказ в обслуживании.`;
                     }
                 } catch (err) {
-                    output.style.color = "#ffaa00";
-                    output.innerHTML = `[!] Сбой детектора: ${err.message}\nУбедитесь, что сайт открыт по HTTPS протоколу.`;
+                    output.style.color = "#ff3333";
+                    output.innerHTML = `[-] ОШИБКА: Ключ доступа "${passwordValue}" отвергнут.\n[-] Статус: Отказ в обслуживании.`;
                 }
 
                 input.value = '';
             }
         });
     </script>
-
 </body>
 </html>
