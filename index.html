@@ -29,7 +29,7 @@
         h1 { font-size: 2rem; margin-bottom: 20px; color: #ffffff; text-shadow: 0 0 10px #ffffff; text-align: center; }
         p { line-height: 1.6; margin: 10px 0; }
         
-        /* Стилизация строки ввода под терминал */
+      
         .input-line {
             display: flex;
             align-items: center;
@@ -73,36 +73,31 @@
     </div>
 
     <script>
-        // === НАСТРОЙКА ПАРОЛЯ И РЕЗУЛЬТАТА ===
-        // Впиши сюда между кавычками ТВОЙ ПАРОЛЬ (который получился после Цезаря)
-        const CORRECT_PASSWORD = "САМУРАЙ"; 
+        const CORRECT_PASSWORD = "SAMYRAI@#$"; 
 
         const input = document.getElementById('terminal-input');
         const output = document.getElementById('output');
 
-        // Фокусируем на поле ввода при клике в любом месте страницы
         document.addEventListener('click', () => input.focus());
 
         input.addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
                 const userPassword = input.value.trim();
                 
-                // Проверяем, если ввели правильный пароль
                 if (userPassword.toLowerCase() === CORRECT_PASSWORD.toLowerCase()) {
                     output.style.color = "#00ff66";
                     output.innerHTML = `[+] ДОСТУП РАЗРЕШЕН. ИНИЦИАЛИЗАЦИЯ ДЕКОДЕРА...\n\n` +
-                                       `Осколок свитка (Часть 2) успешно извлечен:\n` +
+                                       `Осколок свитка  успешно извлечен:\n` +
                                        `👉 Z3JhLnBoL3NhbXVyYWktb3BlcmF0aW9u\n\n` +
                                        `Соедините его с первой частью из метаданных фото!`;
-                    input.disabled = true; // Блокируем ввод после успеха
+                    input.disabled = true; 
                     input.blur();
                 } else {
-                    // Если пароль неверный
                     output.style.color = "#ff3333";
                     output.innerHTML = `[-] ОШИБКА: Ключ "${userPassword}" не распознан сетевым протоколом. Доступ заблокирован.`;
                 }
                 
-                input.value = ''; // Очищаем строку ввода
+                input.value = ''; 
             }
         });
     </script>
