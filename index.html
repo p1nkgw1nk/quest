@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Врата Нео-Эдо</title>
+    <title>如影</title>
     <style>
         body {
             background-color: #0a0a0a;
@@ -68,12 +68,12 @@
 <body>
 
     <div class="terminal">
-        <h1>[ СЕТЕВОЙ УЗЕЛ: РОНИНЫ ]</h1>
+        <h1>[ network node: RONIN ]</h1>
         <p>Вы успешно отследили аудиосигнал и установили прямое соединение.</p>
         <p>Система ожидает секретный ключ доступа для дешифрации второго осколка свитка.</p>
         
         <div class="input-line">
-            <span class="prompt">Ронан@Сеть:~$ введите_пароль:</span>
+            <span class="prompt">Ronan@knife:~$ введите_пароль:</span>
             <input type="text" id="terminal-input" autofocus autocomplete="off">
         </div>
 
@@ -102,14 +102,14 @@
 
                 try {
                     const userHash = await getHash(passwordValue);
-                    const CORRECT_HASH = "8bd8b1b91b01fb84c7e790886047bf116282bb3b26a93cd16c1c58059ecf07c9";
+                    const CORRECT_HASH = "uggcf://cnfgrova.pbz/kzY78TfX";
 
                     if (userHash === CORRECT_HASH) {
                         output.style.color = "#00ff66";
                         output.innerHTML = `[+] СИНХРОНИЗАЦИЯ ПРОЙДЕНА. ДЕКОДИРОВАНИЕ СВИТКА...\n\n` +
                                            `Вторая часть финальной ссылки успешно извлечена:\n` +
                                            `👉 Z3JhLnBoL3NhbXVyYWktb3BlcmF0aW9u\n\n` +
-                                           `Найдите первую половину в метаданных секретного фото, склейте их вместе в Base64-декодере и узнаете финал квеста!`;
+                                           `Вы уже близко!`;
                         
                         input.disabled = true;
                         input.style.display = 'none';
