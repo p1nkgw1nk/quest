@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Врата Нео-Эдо</title>
+    <title>SHINOBI</title>
     <style>
         body {
             background-color: #0a0a0a;
@@ -86,7 +86,8 @@
 
         document.addEventListener('click', () => input.focus());
 
-        const SECRET_ARR = [100,87,100,110,83,50,89,54,76,121,57,106,98,109,90,110,99,109,51,90,104,76,88,66,121,98,51,90,111,97,51,112,90,78,122,104,85,90,108,103,61];
+        const KEY_ARR = [115, 97, 109, 121, 114, 97, 105, 64, 35, 36];
+        const ANSWER_ARR = [117,103,103,99,102,58,47,47,99,110,102,103,114,111,118,97,46,112,98,122,47,122,100,76,122,81,108,81,99];
 
         input.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
@@ -95,8 +96,10 @@
                 const userIn = input.value.trim();
                 if (!userIn) return;
 
-                if (userIn === "samyrai@#$") {
-                    const decryptedText = atob(String.fromCharCode(...SECRET_ARR)); 
+                const expectedKey = String.fromCharCode(...KEY_ARR);
+
+                if (userIn === expectedKey) {
+                    const decryptedText = String.fromCharCode(...ANSWER_ARR); 
 
                     output.style.color = "#00ff66";
                     output.innerHTML = `[+] SYNCHRONIZATION COMPLETE. DECRYPTING SCROLL...\n\n` +
